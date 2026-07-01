@@ -25,10 +25,27 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Password is required"],
         minlength: [6, "Password must be at least 6 characters long"],
-        maxlength: [15, "Password cannot exceed 15 characters"],
+        maxlength: [100, "Password length invalid"], // extended for complex hash structures
         trim: true,
         select: false,
-    }
+    },
+    twoFactorEnabled: {
+        type: Boolean,
+        default: false
+    },
+    twoFactorSecret: {
+        type: String,
+        select: false
+    },
+    // Store user active sessions (browser tokens, device name, IP logs)
+    sessions: [
+        {
+            token: { type: String, required: true },
+            device: { type: String, default: "Unknown Device" },
+            ip: { type: String, default: "127.0.0.1" },
+            lastActive: { type: Date, default: Date.now }
+        }
+    ]
 },{ timestamps: true });
 
 userSchema.pre("save", async function (next) {

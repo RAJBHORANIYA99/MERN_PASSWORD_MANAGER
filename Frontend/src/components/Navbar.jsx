@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { LogOut, ShieldAlert } from "lucide-react";
 
-function Navbar() {
+function Navbar({ darkMode, setDarkMode }) {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -14,44 +14,64 @@ function Navbar() {
                 {},
                 { withCredentials: true }
             );
-
+        } catch (error) {
+            console.warn("Backend logout ignored:", error);
+        } finally {
             localStorage.removeItem("user");
-            toast.success("Logged out successfully!");
+            toast.success("Logged out successfully!", { theme: darkMode ? "dark" : "light" });
             navigate("/login");
-            } catch (error) {
-                toast.error(error.response.data.message);
-            }
+        }
     };
 
     return (
-        <nav className="bg-slate-950 flex flex-col sm:flex-row items-center justify-between p-4 sm:p-5 gap-4 sm:gap-0">
-            <div className="font-bold text-2xl text-white text-center sm:text-left sm:px-10 md:px-20 lg:px-32">
-            <h1 className="font-bold text-2xl sm:text-3xl">
-                <span className="text-pink-500">&lt;</span>
-                    PassX
-                <span className="text-pink-500">/&gt;</span>
-            </h1>
-            </div>
+        <nav className="glass-panel sticky top-0 z-40 px-4 py-3.5 sm:px-8 md:px-16 flex items-center justify-between border-b transition-colors duration-300">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 group">
+                <div className="p-1.5 bg-indigo-650 dark:bg-indigo-600 rounded-xl text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition duration-200">
+                    <ShieldAlert className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                </div>
+                <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-800 dark:text-slate-100 flex items-center">
+                    Pass<span className="text-indigo-600 dark:text-indigo-500">X</span>
+                </span>
+            </Link>
 
-            <ul className="flex flex-wrap justify-center sm:justify-end gap-3 sm:gap-5 text-base sm:text-lg">
-            {user ? (
-                <>
-                    <li className="text-white font-bold self-center">Welcome {user.username}!</li>
-                    <li>
-                        <button onClick={handleLogout} className="text-pink-500 border-2 border-white px-3 py-1 sm:p-1.5 rounded-2xl font-bold hover:bg-white hover:text-slate-900 transition" > Logout </button>
-                    </li>
-                </>
-            ) : (
-                <>
-                <li>
-                    <Link to="/signup" className="text-pink-500 border-2 border-white px-3 py-1 sm:p-1.5 rounded-2xl font-bold hover:bg-white hover:text-slate-900 transition" > Signup </Link>
-                </li>
-                <li>
-                    <Link to="/login" className="text-pink-500 border-2 border-white px-3 py-1 sm:p-1.5 rounded-2xl font-bold hover:bg-white hover:text-slate-900 transition" > Login </Link>
-                </li>
-                </>
-            )}
-            </ul>
+            {/* Right Side Options */}
+            <div className="flex items-center gap-3 sm:gap-5">
+
+
+                {/* User Status / Login Buttons */}
+                <div className="flex items-center gap-2 sm:gap-4">
+                    {user ? (
+                        <>
+                            <span className="text-[11px] sm:text-sm font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[80px] sm:max-w-none">
+                                Hi, <span className="text-indigo-600 dark:text-indigo-400">{user.username}</span>
+                            </span>
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 text-red-600 dark:text-red-400 rounded-xl font-bold transition"
+                            >
+                                <LogOut className="w-3.5 h-3.5" />
+                                <span className="hidden xs:inline">Logout</span>
+                            </button>
+                        </>
+                    ) : (
+                        <div className="flex gap-2">
+                            <Link
+                                to="/login"
+                                className="px-3.5 py-1.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 hover:text-indigo-500 font-semibold transition"
+                            >
+                                Sign In
+                            </Link>
+                            <Link
+                                to="/signup"
+                                className="px-3.5 py-1.5 text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition shadow-sm"
+                            >
+                                Sign Up
+                            </Link>
+                        </div>
+                    )}
+                </div>
+            </div>
         </nav>
     );
 }
