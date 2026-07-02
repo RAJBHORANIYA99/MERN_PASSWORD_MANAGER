@@ -4,7 +4,6 @@ import Manager from "./components/Manager";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import TwoFactorLogin from "./pages/TwoFactorLogin";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -85,7 +84,6 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
             <Route path="/verify-2fa" element={<TwoFactorLogin />} />
             <Route
               path="/"

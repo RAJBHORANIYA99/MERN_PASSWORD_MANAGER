@@ -41,7 +41,7 @@ function Navbar({ darkMode, setDarkMode }) {
 
                 {/* User Status / Login Buttons */}
                 <div className="flex items-center gap-2 sm:gap-4">
-                    {user ? (
+                    {user && (
                         <>
                             <span className="text-[11px] sm:text-sm font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[80px] sm:max-w-none">
                                 Hi, <span className="text-indigo-600 dark:text-indigo-400">{user.username}</span>
@@ -54,21 +54,6 @@ function Navbar({ darkMode, setDarkMode }) {
                                 <span className="hidden xs:inline">Logout</span>
                             </button>
                         </>
-                    ) : (
-                        <div className="flex gap-2">
-                            <Link
-                                to="/login"
-                                className="px-3.5 py-1.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 hover:text-indigo-500 font-semibold transition"
-                            >
-                                Sign In
-                            </Link>
-                            <Link
-                                to="/signup"
-                                className="px-3.5 py-1.5 text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition shadow-sm"
-                            >
-                                Sign Up
-                            </Link>
-                        </div>
                     )}
                 </div>
             </div>
