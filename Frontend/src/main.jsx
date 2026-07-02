@@ -18,6 +18,21 @@ axios.interceptors.request.use(
   }
 );
 
+// Response interceptor to handle session expiration and revoking globally
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // If backend returns 401 (Unauthorized) indicating session is invalid, expired, or revoked
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
