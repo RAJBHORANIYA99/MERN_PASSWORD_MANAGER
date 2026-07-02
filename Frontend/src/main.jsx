@@ -24,8 +24,16 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    // If backend returns 401 (Unauthorized) indicating session is invalid, expired, or revoked
-    if (error.response && error.response.status === 401) {
+    const status = error.response?.status;
+    const msg = error.response?.data?.message || "";
+    
+    // Self-healing check: redirect if 401, or if the server response mentions expiration/revocation
+    if (
+      status === 401 || 
+      msg.includes("expired") || 
+      msg.includes("revoked") || 
+      msg.includes("Login first")
+    ) {
       localStorage.removeItem("user");
       window.location.href = "/login";
     }

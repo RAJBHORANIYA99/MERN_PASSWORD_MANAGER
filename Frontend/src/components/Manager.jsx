@@ -129,7 +129,19 @@ function Manager() {
       });
       setPasswords(response.data.passes || []);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch credentials");
+      const errMsg = error.response?.data?.message || "";
+      toast.error(errMsg || "Failed to fetch credentials");
+      
+      const status = error.response?.status;
+      if (
+        status === 401 || 
+        errMsg.includes("expired") || 
+        errMsg.includes("revoked") || 
+        errMsg.includes("Login first")
+      ) {
+        localStorage.removeItem("user");
+        navigate("/login");
+      }
     } finally {
       setLoading(false);
     }

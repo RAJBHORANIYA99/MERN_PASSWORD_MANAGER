@@ -7,6 +7,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import authRouter from "./routers/authRouter.js";
 import passRouter from "./routers/passRouter.js";
+import errorMiddleware from "./middlewares/error.js";
 
 dotenv.config();
 connectDB();
@@ -51,6 +52,9 @@ app.use("/api/v1/auth", authLimiter);
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/pass", passRouter);
+
+// Global Error Handler Middleware
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
