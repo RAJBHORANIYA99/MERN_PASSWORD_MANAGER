@@ -43,7 +43,7 @@ const sendTokenResponse = async (user, statusCode, req, res, message) => {
         httpOnly: true,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax"
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     });
 
     res.status(statusCode).json({
@@ -169,7 +169,7 @@ export const logout = catchAsyncError(async (req, res) => {
         httpOnly: true,
         expires: new Date(Date.now()),
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax"
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     });
     res.status(200).json({
         success: true,
